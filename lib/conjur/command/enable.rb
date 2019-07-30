@@ -22,30 +22,20 @@ class Conjur::Command::Enable < Conjur::Command
   desc "Enable integrations"
   command :enable do |j|
     j.desc "Enable jenkins integration"
-    j.arg_name "POLICY FILENAME"
     j.command :jenkins do |c|
       c.desc "Fully replace the existing policy, deleting any data that is not declared in the new policy."
       c.switch :replace
-
-      c.desc "Allow explicit deletion statements in the policy."
-      c.switch :delete
       
       c.action do |global_options,options,args|
-        policy_id = require_arg(args, 'POLICY')
-        filename = require_arg(args, 'FILENAME')
-        policy = if filename == '-'
-          STDIN.read
-        else
+        policy_id = 'root'
+        filename = 'integrations/jenkins.yml'
+        policy = 
           require 'open-uri'
           open(filename).read
         end
         
-        method = if options[:replace]
-          Conjur::API::POLICY_METHOD_PUT
-        elsif options[:delete]
-          Conjur::API::POLICY_METHOD_PATCH
-        else
-          Conjur::API::POLICY_METHOD_POST
+        method = Conjur::API::POLICY_METHOD_POST
+        
         end
         
         result = api.load_policy policy_id, policy, method: method
