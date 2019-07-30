@@ -56,6 +56,7 @@ class Conjur::Command::Enable < Conjur::Command
           $stderr.puts "Loaded policy '#{policy_id}'"
           puts JSON.pretty_generate(result)
         end
+      end
     end
   end
 end
