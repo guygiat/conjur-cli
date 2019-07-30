@@ -29,13 +29,15 @@ class Conjur::Command::Enable < Conjur::Command
       c.action do |global_options,options,args|
         policy_id = 'root'
         filename = 'integrations/jenkins.yml'
-        policy = 
+        policy = if filename == '-'
+          STDIN.read
+        else
           require 'open-uri'
           open(filename).read
         end
         
         method = Conjur::API::POLICY_METHOD_POST
-        
+
         end
         
         result = api.load_policy policy_id, policy, method: method
