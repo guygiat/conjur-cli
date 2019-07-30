@@ -20,12 +20,9 @@
 
 class Conjur::Command::Enable < Conjur::Command
   desc "Enable integrations"
-  command :enable do |j|
-    j.desc "Enable jenkins integration"
-    j.command :jenkins do |c|
-      c.desc "Fully replace the existing policy, deleting any data that is not declared in the new policy."
-      c.switch :replace
-      
+  command :enable do |integration|
+    integration.desc "Enable jenkins integration"
+    integration.command :jenkins do |c|
       c.action do |global_options,options,args|
         policy_id = 'root'
         filename = 'integrations/jenkins.yml'
@@ -41,6 +38,24 @@ class Conjur::Command::Enable < Conjur::Command
         $stderr.puts "Loaded policy '#{policy_id}'"
         puts JSON.pretty_generate(result)
       end
+
+      integration.desc "Enable ansible integration"
+      integration.command :ansible do |c|
+        c.action do |global_options,options,args|
+          policy_id = 'root'
+          filename = 'integrations/ansible.yml'
+          policy = if filename == '-'
+            STDIN.read  
+          else
+            require 'open-uri'
+            open(filename).read
+          end
+          
+          method = Conjur::API::POLICY_METHOD_POST
+          result = api.load_policy policy_id, policy, method: method
+          $stderr.puts "Loaded policy '#{policy_id}'"
+          puts JSON.pretty_generate(result)
+        end
     end
   end
 end
