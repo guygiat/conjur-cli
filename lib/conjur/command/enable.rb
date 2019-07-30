@@ -20,10 +20,10 @@
 
 class Conjur::Command::Enable < Conjur::Command
   desc "Enable integrations"
-  command :enable do |p|
-    p.desc "Load a policy"
-    p.arg_name "POLICY FILENAME"
-    p.command :load do |c|
+  command :enable do |j|
+    j.desc "Enable jenkins integration"
+    j.arg_name "POLICY FILENAME"
+    j.command :jenkins do |c|
       c.desc "Fully replace the existing policy, deleting any data that is not declared in the new policy."
       c.switch :replace
 
