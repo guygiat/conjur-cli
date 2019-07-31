@@ -28,11 +28,12 @@ class Conjur::Command::Enable < Conjur::Command
       c.flag [:host]
 
       c.action do |global_options,options,args|
+        host = options[:host]
         policy_id = 'root'
         filename = 'integrations/jenkins.yml'
         require 'open-uri'
         file = open(filename).read
-        policy = file.gsub("<HOST>", :host.to_s)
+        policy = file.gsub("<HOST>", host)
         
         method = Conjur::API::POLICY_METHOD_POST
         result = api.load_policy policy_id, policy, method: method
