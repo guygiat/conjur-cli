@@ -23,14 +23,16 @@ class Conjur::Command::Enable < Conjur::Command
   command :enable do |integration|
     integration.desc "Enable jenkins integration"
     integration.command :jenkins do |c|
+      c.arg_name "host"
+      c.desc "Host name for policy"
+      c.flag [:host]
+
       c.action do |global_options,options,args|
         policy_id = 'root'
         filename = 'integrations/jenkins.yml'
-        policy = if filename == '-'
-          STDIN.read  
-        else
-          require 'open-uri'
-          open(filename).read
+        require 'open-uri'
+        file = open(filename).read
+        policy = file.gsub("<HOST>", :host)
         end
         
         method = Conjur::API::POLICY_METHOD_POST

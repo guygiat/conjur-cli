@@ -5,7 +5,7 @@
     jenkins: true
   body:  
     - !host
-      id: master01
+      id: <HOST>
       annotations:
         jenkins: true
     - !layer
@@ -23,6 +23,6 @@
         id: docker_password
         kind: password
     - !permit
-      role: !host master01
+      role: !host <HOST>
       privileges: [read, execute] 
       resources: *variables
