@@ -40,7 +40,8 @@ class Conjur::Command::Enable < Conjur::Command
         $stderr.puts "Loaded policy '#{policy_id}'"
         puts JSON.pretty_generate(result)
       end
-
+    end
+    
     integration.desc "Enable ansible integration"
     integration.command :ansible do |c|
       c.arg_name "host"
@@ -60,7 +61,6 @@ class Conjur::Command::Enable < Conjur::Command
         $stderr.puts "Loaded policy '#{policy_id}'"
         puts JSON.pretty_generate(result)
       end
-    end
     end
   end
 end
