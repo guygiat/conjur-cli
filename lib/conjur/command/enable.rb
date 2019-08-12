@@ -25,7 +25,7 @@ class Conjur::Command::Enable < Conjur::Command
     integration.command :jenkins do |c|
       c.arg_name "host"
       c.desc "Host name for policy"
-      c.flag [:host]
+      c.flag [:h,:host]
 
       c.action do |global_options,options,args|
         host = options[:host]
@@ -46,7 +46,7 @@ class Conjur::Command::Enable < Conjur::Command
     integration.command :ansible do |c|
       c.arg_name "host"
       c.desc "Host name for policy"
-      c.flag [:host]
+      c.flag [:h,:host]
   
       c.action do |global_options,options,args|
         host = options[:host]
