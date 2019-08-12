@@ -41,23 +41,24 @@ class Conjur::Command::Enable < Conjur::Command
         puts JSON.pretty_generate(result)
       end
 
-      integration.desc "Enable ansible integration"
-      integration.command :ansible do |c|
-        c.action do |global_options,options,args|
-          policy_id = 'root'
-          filename = 'integrations/ansible.yml'
-          policy = if filename == '-'
-            STDIN.read  
-          else
-            require 'open-uri'
-            open(filename).read
-          end
-          
-          method = Conjur::API::POLICY_METHOD_POST
-          result = api.load_policy policy_id, policy, method: method
-          $stderr.puts "Loaded policy '#{policy_id}'"
-          puts JSON.pretty_generate(result)
-        end
+    integration.desc "Enable ansible integration"
+    integration.command :ansible do |c|
+      c.arg_name "host"
+      c.desc "Host name for policy"
+      c.flag [:host]
+  
+      c.action do |global_options,options,args|
+        host = options[:host]
+        policy_id = 'root'
+        filename = 'integrations/ansible.yml'
+        require 'open-uri'
+        file = open(filename).read
+        policy = file.gsub("<HOST>", host)
+        
+        method = Conjur::API::POLICY_METHOD_POST
+        result = api.load_policy policy_id, policy, method: method
+        $stderr.puts "Loaded policy '#{policy_id}'"
+        puts JSON.pretty_generate(result) 
       end
     end
   end

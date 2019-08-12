@@ -9,7 +9,7 @@
       annotations:
         ansible: true
     - !host
-      id: ansible-tower
+      id: <HOST>
       annotations:
         ansible: true
     - !host-factory
@@ -30,6 +30,6 @@
       privileges: [read, execute]
       resources: *variables
     - !permit
-      role: !host ansible-tower
+      role: !host <HOST>
       privileges: [read, execute]
       resources: *variables
